@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de inflación en dólares en Argentina</title>
+<meta name="description" content="Convertí montos en dólares entre cualquier par de meses, midiendo cuánto se movieron los precios argentinos una vez descontado el dólar.">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body data-csv="inflacionmensual.csv" data-csv-dolar="devaluacion_mensual.csv" data-simbolo="US$">
+<main>
+  <h1>Calculadora de inflación en dólares en Argentina</h1>
+
+  <p>Cuánto se movieron los precios argentinos medidos en dólares, es decir, la inflación una vez
+  descontado lo que se movió el tipo de cambio. Ingresá un monto en dólares y convertilo entre
+  cualquier mes desde <span id="rango-desde">—</span> y <span id="rango-hasta">—</span>.</p>
+
+  <ul class="enlaces">
+    <li><a href="./">Calculadora de inflación histórica.</a></li>
+    <li><a href="devaluacion">Calculadora de devaluación histórica.</a></li>
+    <li><a href="dolar_ajustado">Dólar ajustado por inflación.</a></li>
+  </ul>
+
+  <form id="calculadora" novalidate>
+    <div class="fila">
+      <span class="signo">US$</span>
+      <input id="monto-origen" class="monto" type="text" inputmode="decimal" value="100"
+             aria-label="Monto de origen en dólares">
+      <span class="etiqueta">en</span>
+      <select id="mes-origen" aria-label="Mes de origen"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-origen" aria-label="Año de origen"></select>
+    </div>
+
+    <div class="fila fila-medio">
+      <span class="equivale">equivale aproximadamente a</span>
+      <button id="invertir" type="button" title="Invertir fechas" aria-label="Invertir fechas">↕</button>
+    </div>
+
+    <div class="fila">
+      <span class="signo">US$</span>
+      <input id="monto-destino" class="monto" type="text" inputmode="decimal"
+             aria-label="Monto de destino en dólares">
+      <span class="etiqueta">en</span>
+      <select id="mes-destino" aria-label="Mes de destino"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-destino" aria-label="Año de destino"></select>
+    </div>
+
+    <div class="fila fila-fuente">
+      <span class="etiqueta etiqueta-fuente">Fuente:</span>
+      <span class="fuente">Índice de precios al consumidor y cotizaciones cierre vendedor</span>
+    </div>
+  </form>
+
+  <p id="resumen" class="resumen"></p>
+  <p id="aviso" class="aviso" hidden></p>
+
+  <p class="acciones">
+    <button type="button" id="ver-grafico" aria-expanded="false" aria-controls="grafico">
+      Ver gráfico
+    </button>
+  </p>
+
+  <figure class="grafico" id="grafico" hidden>
+    <figcaption id="grafico-titulo">Evolución mes a mes</figcaption>
+    <div class="grafico-lienzo">
+      <svg id="grafico-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet"
+           role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-resumen"></svg>
+      <div id="grafico-tooltip" class="grafico-tooltip" hidden aria-hidden="true"></div>
+    </div>
+    <p id="grafico-resumen" class="grafico-nota"></p>
+  </figure>
+
+  <section class="detalle">
+    <h2>Variación mensual del período</h2>
+    <div class="tabla-scroll">
+      <table id="tabla-meses">
+        <thead>
+          <tr><th>Mes</th><th>Variación mensual</th><th>Acumulado desde el origen</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <h2>Cómo se calcula</h2>
+
+    <p>Para cada mes se combinan la inflación en pesos y la devaluación de ese mismo mes:</p>
+
+    <p><code>variación en dólares = (1 + IPC) / (1 + devaluación) − 1</code></p>
+
+    <p>Es un <strong>cociente, no una resta</strong>. La resta parece equivalente y no lo es: en
+    diciembre de 2023 los precios subieron 25,47% y el dólar 124,26%. Restando daría −98,79%, o sea
+    que en dólares los precios se habrían derrumbado casi por completo en un mes. El cociente da
+    −44,05%, que es la cuenta correcta: 1,2547 / 2,2426 = 0,5595. Las dos se parecen solo cuando los
+    dos números son chicos, y en esta serie no lo son.</p>
+
+    <p>La diferencia no es menor: sobre todo el período, US$100 pasan a US$118,48 con el cociente y
+    a US$1,74 con la resta.</p>
+
+    <p>Cada mes se toma a valores de comienzo de mes, igual que en las otras calculadoras, y las
+    variaciones mensuales se encadenan en un índice.</p>
+
+    <p>Datos: IPC mensual (<code>inflacionmensual.csv</code>) y devaluación mensual
+    (<code>devaluacion_mensual.csv</code>), esta última calculada sobre las cotizaciones de cierre
+    vendedor que publica el BCRA en
+    <a href="https://www.bcra.gob.ar/evolucion-moneda">evolución de la moneda</a>.</p>
+  </footer>
+</main>
+
+<script src="datos.js"></script>
+<script src="grafico.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

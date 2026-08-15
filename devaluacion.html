@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de devaluación histórica de Argentina</title>
+<meta name="description" content="Convertí montos entre cualquier par de meses usando la devaluación mensual del peso frente al dólar.">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body class="con-cotizacion" data-csv="devaluacion_mensual.csv">
+<main>
+  <h1>Calculadora de devaluación histórica de Argentina</h1>
+
+  <p>Montos históricos pueden ser convertidos a valores de hoy en día usando la variación de la cotización del dólar según BCRA (Cierre vendedor). Usá la calculadora de abajo para convertir montos entre cualquier mes
+  desde <span id="rango-desde">—</span> y <span id="rango-hasta">—</span>.</p>
+
+  <ul class="enlaces">
+    <li><a href="./">Calculadora de inflación histórica.</a></li>
+    <li><a href="dolar_ajustado">Dólar ajustado por inflación.</a></li>
+    <li><a href="inflacion_en_dolares">Inflación en dólares.</a></li>
+  </ul>
+
+  <form id="calculadora" novalidate>
+    <div class="fila">
+      <span class="signo">$</span>
+      <input id="monto-origen" class="monto" type="text" inputmode="decimal" value="100"
+             aria-label="Monto de origen">
+      <span class="etiqueta">en</span>
+      <select id="mes-origen" aria-label="Mes de origen"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-origen" aria-label="Año de origen"></select>
+      <span class="tc-momento" id="tc-origen"></span>
+    </div>
+
+    <div class="fila fila-medio">
+      <span class="equivale">equivale aproximadamente a</span>
+      <button id="invertir" type="button" title="Invertir fechas" aria-label="Invertir fechas">↕</button>
+    </div>
+
+    <div class="fila">
+      <span class="signo">$</span>
+      <input id="monto-destino" class="monto" type="text" inputmode="decimal"
+             aria-label="Monto de destino">
+      <span class="etiqueta">en</span>
+      <select id="mes-destino" aria-label="Mes de destino"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-destino" aria-label="Año de destino"></select>
+      <span class="tc-momento" id="tc-destino"></span>
+    </div>
+
+    <div class="fila fila-fuente">
+      <span class="etiqueta etiqueta-fuente">Fuente:</span>
+      <span class="fuente"><a href="https://www.bcra.gob.ar/evolucion-moneda">BCRA: Cotizaciones cierre vendedor de dólar oficial</a></span>
+    </div>
+  </form>
+
+  <p id="resumen" class="resumen"></p>
+  <p id="aviso" class="aviso" hidden></p>
+
+  <p class="acciones">
+    <button type="button" id="ver-grafico" aria-expanded="false" aria-controls="grafico">
+      Ver gráfico
+    </button>
+  </p>
+
+  <figure class="grafico" id="grafico" hidden>
+    <figcaption id="grafico-titulo">Evolución mes a mes</figcaption>
+    <div class="grafico-lienzo">
+      <svg id="grafico-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet"
+           role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-resumen"></svg>
+      <div id="grafico-tooltip" class="grafico-tooltip" hidden aria-hidden="true"></div>
+    </div>
+    <p id="grafico-resumen" class="grafico-nota"></p>
+  </figure>
+
+  <section class="detalle">
+    <h2>Variación mensual del período</h2>
+    <div class="tabla-scroll">
+      <table id="tabla-meses">
+        <thead>
+          <tr><th>Mes</th><th>Variación mensual</th><th>Acumulado desde el origen</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Cada mes se toma a valores de comienzo de mes: «julio de 2026» es la cotización al 1 de julio,
+    antes de aplicar la devaluación de julio. Por eso convertir de un mes a otro acumula las
+    variaciones de los meses que transcurren entre ambas fechas.</p>
+
+    <p>A diferencia de la inflación, la devaluación mensual puede ser negativa cuando el peso se
+    aprecia; en esos meses el monto convertido baja.</p>
+
+    <p>Datos: devaluación mensual, calculada sobre las
+    cotizaciones de cierre vendedor que publica el BCRA en
+    <a href="https://www.bcra.gob.ar/evolucion-moneda">evolución de la moneda</a>. Cada fila lleva la
+    fecha del último día del mes al que corresponde la variación, y el índice se encadena tomando el
+    primer mes disponible como base 100.</p>
+  </footer>
+</main>
+
+<script src="datos.js"></script>
+<script src="grafico.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

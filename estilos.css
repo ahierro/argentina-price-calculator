@@ -1,0 +1,447 @@
+:root {
+  --fondo: #ecebe9;
+  --texto: #4a4340;
+  --texto-fuerte: #332e2b;
+  --borde: #b9b3ad;
+  --borde-foco: #4a7cc7;
+  --campo: #ffffff;
+  --campo-inerte: #f4f3f1;
+  --acento: #6b2fa0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  /* Cifras alineadas y de ancho fijo: las columnas de numeros quedan parejas. */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 1.25rem;
+  font-weight: 600;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-align: center;
+  color: var(--texto-fuerte);
+}
+
+h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--texto-fuerte);
+}
+
+p { margin: 0 0 1rem; }
+
+/* --- calculadora --- */
+
+form {
+  margin: 2rem 0 1.5rem;
+}
+
+.fila {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.signo,
+.etiqueta {
+  display: flex;
+  align-items: center;
+  padding: 0 0.85rem;
+  border: 1px solid var(--borde);
+  background: var(--campo-inerte);
+  color: var(--texto);
+}
+
+.signo { border-right: none; }
+.etiqueta { border-left: none; border-right: none; }
+
+.monto,
+select {
+  font: inherit;
+  color: var(--texto-fuerte);
+  background: var(--campo);
+  border: 1px solid var(--borde);
+  padding: 0.5rem 0.7rem;
+  min-width: 0;
+}
+
+.monto {
+  width: 15rem;
+  flex: 0 1 15rem;
+}
+
+select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+#mes-origen, #mes-destino { flex: 0 1 8.5rem; }
+#anio-origen, #anio-destino { flex: 0 1 6rem; }
+
+.monto:focus,
+select:focus,
+button:focus {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: -1px;
+}
+
+.monto.invalido {
+  border-color: #b1483c;
+  background: #fdf3f2;
+}
+
+/* Cotización de referencia al lado del año: informativa, no un control. */
+.tc-momento {
+  display: flex;
+  align-items: center;
+  padding-left: 0.7rem;
+  font-size: 0.9rem;
+  color: #6d6661;
+  white-space: nowrap;
+}
+
+.tc-momento:empty { display: none; }
+
+/* La leyenda ocupa lugar en la fila: se le hace sitio achicando el campo del
+   monto, para que no termine envolviendo debajo del año. */
+.con-cotizacion .monto {
+  width: 12.5rem;
+  flex-basis: 12.5rem;
+}
+
+.fila-medio {
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0.9rem 0;
+}
+
+.equivale { color: var(--texto); }
+
+#invertir {
+  font: inherit;
+  line-height: 1;
+  padding: 0.35rem 1.6rem;
+  border: 1px solid #5e5a56;
+  border-radius: 999px;
+  background: #6f6b67;
+  color: #fff;
+  cursor: pointer;
+}
+
+#invertir:hover { background: #5e5a56; }
+
+.fila-fuente { margin-top: 1.25rem; }
+
+.etiqueta-fuente {
+  border: 1px solid var(--borde);
+  border-right: none;
+}
+
+.fuente {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--borde);
+  background: var(--campo);
+  color: var(--texto-fuerte);
+}
+
+/* --- resultados --- */
+
+.resumen {
+  text-align: center;
+  margin: 1.5rem auto 0;
+  max-width: 34rem;
+}
+
+.resumen strong { color: var(--texto-fuerte); }
+
+.aviso {
+  text-align: center;
+  color: #8d3b30;
+}
+
+/* Una aclaración, no un error. */
+.aviso.aviso-nota {
+  text-align: left;
+  color: #6d6661;
+  font-size: 0.9rem;
+}
+
+.acciones {
+  text-align: center;
+  margin: 1.25rem 0;
+}
+
+.acciones button {
+  font: inherit;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--borde);
+  background: var(--campo);
+  color: var(--texto-fuerte);
+  cursor: pointer;
+}
+
+.acciones button:hover { background: var(--campo-inerte); }
+
+.detalle { margin-top: 1rem; }
+
+.tabla-scroll {
+  overflow: auto;
+  max-height: 26rem;
+  border-bottom: 1px solid #dcd8d3;
+}
+
+.tabla-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--fondo);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th, td {
+  padding: 0.4rem 0.7rem;
+  border-bottom: 1px solid #dcd8d3;
+  text-align: right;
+  white-space: nowrap;
+}
+
+th:first-child, td:first-child { text-align: left; }
+
+thead th {
+  font-weight: 600;
+  color: var(--texto-fuerte);
+  border-bottom: 1px solid var(--borde);
+}
+
+tbody tr:last-child td { font-weight: 700; color: var(--texto-fuerte); }
+
+footer {
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: #6d6661;
+}
+
+a { color: var(--acento); }
+
+.enlaces {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+}
+
+/* --- página del dólar ajustado --- */
+
+.resumen-datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 0;
+}
+
+.resumen-datos div {
+  border: 1px solid var(--borde);
+  background: var(--campo);
+  padding: 0.6rem 0.8rem;
+}
+
+.resumen-datos dt {
+  font-size: 0.85rem;
+  color: #6d6661;
+}
+
+.resumen-datos dd {
+  margin: 0.15rem 0 0;
+  color: var(--texto-fuerte);
+}
+
+.controles {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.controles label { font-size: 0.95rem; }
+
+.controles select {
+  font: inherit;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--borde);
+  background: var(--campo);
+  color: var(--texto-fuerte);
+}
+
+.conteo {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #6d6661;
+}
+
+.tabla-alta { max-height: 34rem; }
+
+/* Cuatro columnas no entran con los títulos en una sola línea. */
+#tabla-pasado th { white-space: normal; }
+
+/* --- gráfico --- */
+
+.grafico {
+  --serie: #2a78d6;      /* categórica 1, validada sobre superficie blanca */
+  --grilla: #e6e3de;
+  --eje: #c3beb7;
+  --eje-texto: #78716b;
+
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1rem 0.6rem;
+  border: 1px solid var(--borde);
+  background: var(--campo);
+}
+
+.grafico figcaption {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--texto-fuerte);
+}
+
+.grafico-lienzo {
+  position: relative;
+}
+
+#grafico-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+#grafico-svg:focus-visible {
+  outline: 2px solid var(--borde-foco);
+  outline-offset: 2px;
+}
+
+.g-grilla, .g-base {
+  stroke: var(--grilla);
+  stroke-width: 1;
+}
+
+.g-base { stroke: var(--eje); }
+
+.g-eje {
+  fill: var(--eje-texto);
+  font-size: 12px;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.g-linea {
+  fill: none;
+  stroke: var(--serie);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.g-fin { fill: var(--serie); }
+
+.g-etiqueta {
+  fill: var(--texto-fuerte);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.g-cruz[hidden] { display: none; }
+
+.g-cruz-linea {
+  stroke: var(--eje);
+  stroke-width: 1;
+}
+
+.g-cruz-punto {
+  fill: var(--serie);
+  stroke: var(--campo);   /* anillo de superficie de 2px sobre la línea */
+  stroke-width: 2;
+}
+
+.g-captura {
+  fill: transparent;
+}
+
+.grafico-tooltip[hidden] { display: none; }
+
+.grafico-tooltip {
+  position: absolute;
+  top: 0;
+  transform: translateX(0.6rem);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--borde);
+  background: var(--campo);
+  box-shadow: 0 2px 6px rgba(11, 11, 11, 0.12);
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.grafico-tooltip.a-la-izquierda { transform: translateX(calc(-100% - 0.6rem)); }
+
+.grafico-tooltip strong {
+  font-size: 1.05rem;
+  color: var(--texto-fuerte);
+}
+
+.grafico-tooltip span {
+  font-size: 0.85rem;
+  color: var(--eje-texto);
+}
+
+.grafico-tooltip .g-clave {
+  display: block;
+  width: 1.1rem;
+  height: 2px;
+  margin-top: 0.35rem;
+  background: var(--serie);
+}
+
+.grafico-nota {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: #6d6661;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+@media (max-width: 560px) {
+  .fila { gap: 0.4rem; }
+  .signo, .etiqueta { border: 1px solid var(--borde); }
+  .monto { flex-basis: 100%; width: auto; }
+}

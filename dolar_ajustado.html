@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dólar ajustado por inflación</title>
+<meta name="description" content="Serie diaria del tipo de cambio con su valor ajustado a precios de hoy por el IPC de Argentina.">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<main>
+  <h1>Dólar ajustado por inflación</h1>
+
+  <p><a href="./">← Calculadora de inflación</a> · <a href="devaluacion">Calculadora de devaluación</a>
+  · <a href="inflacion_en_dolares">Inflación en dólares</a></p>
+
+  <p>Serie diaria del tipo de cambio junto a su valor ajustado por el IPC, es decir, cuánto
+  representaría cada cotización a precios de <strong id="mes-referencia">hoy</strong>.</p>
+
+  <p id="aviso" class="aviso" hidden></p>
+
+  <div class="controles">
+    <label for="filtro-anio">Año:</label>
+    <select id="filtro-anio"></select>
+    <label for="orden">Orden de la tabla:</label>
+    <select id="orden">
+      <option value="desc">Más reciente primero</option>
+      <option value="asc">Más antiguo primero</option>
+    </select>
+    <span id="conteo" class="conteo"></span>
+  </div>
+
+  <dl class="resumen-datos">
+    <div><dt>Último dato</dt><dd id="stat-ultimo">—</dd></div>
+    <div><dt>Máximo ajustado</dt><dd id="stat-max">—</dd></div>
+    <div><dt>Mínimo ajustado</dt><dd id="stat-min">—</dd></div>
+    <div><dt>Promedio ajustado</dt><dd id="stat-promedio">—</dd></div>
+  </dl>
+
+  <figure class="grafico" id="grafico">
+    <figcaption id="grafico-titulo">Dólar ajustado a precios de hoy</figcaption>
+    <div class="grafico-lienzo">
+      <svg id="grafico-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet"
+           role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-resumen"></svg>
+      <div id="grafico-tooltip" class="grafico-tooltip" hidden aria-hidden="true"></div>
+    </div>
+    <p id="grafico-resumen" class="grafico-nota"></p>
+  </figure>
+
+  <div class="tabla-scroll tabla-alta">
+    <table id="tabla-dolar">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo de cambio</th>
+          <th id="th-ajustado">Ajustado a precios de hoy</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>El ajuste multiplica cada cotización por <code>índice de referencia / índice del día</code>.
+    El índice de referencia es el del último mes disponible del IPC. Para ubicar un día dentro de su
+    mes, el índice se interpola geométricamente entre el comienzo de ese mes y el del siguiente; en
+    el último mes, que todavía no tiene inflación publicada, se usa el nivel de comienzo de mes y el
+    ajuste queda en 1.</p>
+
+    <p>Datos: tipo de cambio diario (<code>tipo_de_cambio.csv</code>) e IPC mensual
+    (<code>inflacionmensual.csv</code>).</p>
+  </footer>
+</main>
+
+<script src="datos.js"></script>
+<script src="grafico.js"></script>
+<script src="app-dolar.js"></script>
+</body>
+</html>

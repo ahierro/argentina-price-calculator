@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de inflación histórica de Argentina</title>
+<meta name="description" content="Convertí precios entre cualquier par de meses usando el IPC de Argentina.">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<main>
+  <h1>Calculadora de inflación histórica de Argentina</h1>
+
+  <p>Precios históricos pueden ser convertidos a precios de hoy en día usando datos de índices de
+  inflación históricos. Usá la calculadora de abajo para convertir precios entre cualquier mes desde
+  <span id="rango-desde">enero de 2016</span> y <span id="rango-hasta">julio de 2026</span>.</p>
+
+  <ul class="enlaces">
+    <li><a href="devaluacion">Calculadora de devaluación histórica.</a></li>
+    <li><a href="dolar_ajustado">Dólar ajustado por inflación.</a></li>
+    <li><a href="inflacion_en_dolares">Inflación en dólares.</a></li>
+  </ul>
+
+  <form id="calculadora" novalidate>
+    <div class="fila">
+      <span class="signo">$</span>
+      <input id="monto-origen" class="monto" type="text" inputmode="decimal" value="100"
+             aria-label="Monto de origen">
+      <span class="etiqueta">en</span>
+      <select id="mes-origen" aria-label="Mes de origen"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-origen" aria-label="Año de origen"></select>
+    </div>
+
+    <div class="fila fila-medio">
+      <span class="equivale">equivale aproximadamente a</span>
+      <button id="invertir" type="button" title="Invertir fechas" aria-label="Invertir fechas">↕</button>
+    </div>
+
+    <div class="fila">
+      <span class="signo">$</span>
+      <input id="monto-destino" class="monto" type="text" inputmode="decimal"
+             aria-label="Monto de destino">
+      <span class="etiqueta">en</span>
+      <select id="mes-destino" aria-label="Mes de destino"></select>
+      <span class="etiqueta">de</span>
+      <select id="anio-destino" aria-label="Año de destino"></select>
+    </div>
+
+    <div class="fila fila-fuente">
+      <span class="etiqueta etiqueta-fuente">Fuente:</span>
+      <span class="fuente"><a href="https://www.datos.gob.ar/es/dataset/indice-de-precios-al-consumidor-nacional-ipc-base-diciembre-2016/resource/aa08d18e-f55e-5c1c-965e-1b7be444eda1">INDEC: Índice de precios al consumidor</a></span>
+    </div>
+  </form>
+
+  <p id="resumen" class="resumen"></p>
+  <p id="aviso" class="aviso" hidden></p>
+
+  <p class="acciones">
+    <button type="button" id="ver-grafico" aria-expanded="false" aria-controls="grafico">
+      Ver gráfico
+    </button>
+  </p>
+
+  <figure class="grafico" id="grafico" hidden>
+    <figcaption id="grafico-titulo">Evolución mes a mes</figcaption>
+    <div class="grafico-lienzo">
+      <svg id="grafico-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet"
+           role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-resumen"></svg>
+      <div id="grafico-tooltip" class="grafico-tooltip" hidden aria-hidden="true"></div>
+    </div>
+    <p id="grafico-resumen" class="grafico-nota"></p>
+  </figure>
+
+  <section class="detalle">
+    <h2>Variación mensual del período</h2>
+    <div class="tabla-scroll">
+      <table id="tabla-meses">
+        <thead>
+          <tr><th>Mes</th><th>Variación mensual</th><th>Acumulado desde el origen</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Cada mes se toma a precios de comienzo de mes: «julio de 2026» son los precios al 1 de julio,
+    antes de aplicar la inflación de julio. Por eso convertir de un mes a otro acumula las
+    variaciones de los meses que transcurren entre ambas fechas.</p>
+  </footer>
+</main>
+
+<script src="datos.js"></script>
+<script src="grafico.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
