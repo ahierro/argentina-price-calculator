@@ -135,6 +135,16 @@ funciona abriendo los archivos con `file://`.
 npx serve --listen 4173 .
 ```
 
+Las páginas se enlazan entre sí con rutas sin extensión (`/devaluacion`, no
+`/devaluacion.html`). `serve` las resuelve solo; en otros hosts hay que pedirlo. Para eso
+está `vercel.json`:
+
+```json
+{ "cleanUrls": true, "trailingSlash": false }
+```
+
+Sin `cleanUrls`, Vercel responde 404 en `/devaluacion` aunque `/devaluacion.html` funcione.
+
 ## Archivos
 
 - `index.html` — la calculadora de inflación.
@@ -145,6 +155,7 @@ npx serve --listen 4173 .
 - `datos.js` — lectura y validación de los CSV, compartida por las cuatro páginas.
 - `grafico.js` — el gráfico de línea, compartido por las cuatro páginas.
 - `estilos.css` — estilos compartidos por las cuatro páginas.
+- `vercel.json` — solo la config de rutas sin extensión para el deploy.
 - `inflacionmensual.csv` — IPC mensual.
 - `devaluacion_mensual.csv` — devaluación mensual del peso.
 - `tipo_de_cambio.csv` — tipo de cambio diario.
